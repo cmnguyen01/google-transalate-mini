@@ -12,6 +12,7 @@ class Window(QMainWindow):
         ##input field
         self.input_field=QLineEdit(self)
         self.input_field.setGeometry(10,240,400,40)
+        self.input_field.setText("default")
         
 
         #select language
@@ -21,6 +22,8 @@ class Window(QMainWindow):
         #return language
         self.output_language=QComboBox(self)
         self.output_language.setGeometry(450,140,400,40)
+        self.fillDropDowwn()
+        self.input_language.setCurrentText('english')
 
         #output field
         self.output=QLineEdit(self)
@@ -30,19 +33,34 @@ class Window(QMainWindow):
         #button
         self.button=QPushButton("translate",self)
         self.button.setGeometry(380,340,100,40)
-        #self.button.clicked.connect(translateText(self.input_field.text,self.output.text,self.input_language.currentText,self.output_language.currentText))
-
+        
+        self.button.clicked.connect(lambda:self.translateText(self.input_field.text(),self.output.text(),self.input_language.currentText(),self.output_language.currentText()))
+        #self.button.clicked.connect(lambda:sayhello(self.input_field.text()))
+        self.button.show()
         self.show()
         
-def translateText(input,output,input_language,output_language):
-    src_text=input
-    src_lang=input_language
-    dest_lang=output_language
-    translation=Translator.translate(self=output,text=src_text,dest=dest_lang,src=src_lang)
-    
+    def translateText(self,input,output,input_language,output_language):
+        src_text=input
+        #convert to abreviation
+        src_lang=self.returnabr(input_language)
+        dest_lang=self.returnabr(output_language)
+        #run translator method
+        translation=Translator()
+        outputtext=translation.translate(text=src_text,dest=dest_lang,src=src_lang)
+        self.output.setText(outputtext.text)
+        
+        
+   
 
-def fillDropDowwn(self):
-    pass
+    def fillDropDowwn(self):
+        for lang in LANGUAGES.values():
+            self.input_language.addItem(lang)
+            self.output_language.addItem(lang)
+    #function for 
+    def returnabr(self,lang):
+        for abr,lan in LANGUAGES.items():
+            if lang==lan:
+                return abr
 
 app=QApplication(sys.argv)
 
